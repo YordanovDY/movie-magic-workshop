@@ -12,7 +12,7 @@ app.set('view engine', 'hbs');
 app.set('views', './src/views');
 
 app.get('/', (req, res) => {
-    res.render('test', {layout: false});
+    res.render('home');
 });
 
 app.listen(port, () => console.log(`Server is listening on http://localhost:${port}...`));
