@@ -1,5 +1,6 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
+import routes from './routes.js';
 
 const app = express();
 const port = 3000;
@@ -13,20 +14,22 @@ app.set('views', './src/views');
 
 app.use('/static', express.static('./src/public'));
 
-app.get('/', (req, res) => {
-    res.render('home');
-});
+app.use(routes);
 
-app.get('/about', (req, res) => {
-    res.render('about');
-});
+// app.get('/', (req, res) => {
+//     res.render('home');
+// });
 
-app.get('/create', (req, res) => {
-    res.render('create');
-});
+// app.get('/about', (req, res) => {
+//     res.render('about');
+// });
 
-app.get('*', (req, res) => {
-    res.render('404');
-});
+// app.get('/create', (req, res) => {
+//     res.render('create');
+// });
+
+// app.get('*', (req, res) => {
+//     res.render('404');
+// });
 
 app.listen(port, () => console.log(`Server is listening on http://localhost:${port}...`));
