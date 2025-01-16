@@ -16,8 +16,4 @@ app.use('/static', express.static('./src/public'));
 
 app.use(routes);
 
-// app.get('/create', (req, res) => {
-//     res.render('create');
-// });
-
 app.listen(port, () => console.log(`Server is listening on http://localhost:${port}...`));
