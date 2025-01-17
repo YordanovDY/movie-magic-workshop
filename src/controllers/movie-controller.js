@@ -10,8 +10,13 @@ movieController.get('/create', (req, res) => {
 movieController.get('/:movieId/details', (req, res) => {
     const movieId = req.params.movieId;
     const movie = movieService.getSingleMovie(movieId);
-    
-    res.render('details', { movie });
+
+    if (movieService.isFound(movie)) {
+        res.render('details', { movie });
+        return;
+    }
+
+    res.redirect('/404');
 })
 
 export default movieController;
