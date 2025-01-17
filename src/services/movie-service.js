@@ -2,9 +2,14 @@ import { v4 as generateId } from 'uuid';
 import movies from "../movies.js";
 
 const movieService = {
+    getMovies,
     getSingleMovie,
     saveMovie,
     isFound
+}
+
+function getMovies() {
+    return movies;
 }
 
 function getSingleMovie(movieId) {
