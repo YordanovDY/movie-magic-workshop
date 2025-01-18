@@ -27,9 +27,9 @@ export default [
         category: '',
         genre: 'Sci-Fi',
         director: 'Christopher Nolan',
-        year: '2010',
+        year: 2010,
         imageUrl: 'https://upload.wikimedia.org/wikipedia/en/2/2e/Inception_%282010%29_theatrical_poster.jpg',
-        rating: '8.2',
+        rating: 7.8,
         description: 'A skilled thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.'
       }
 ];

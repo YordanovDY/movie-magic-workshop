@@ -20,7 +20,9 @@ function saveMovie(movieObj) {
     const id = generateId();
     const movie = {
         id,
-        ...movieObj
+        ...movieObj,
+        rating: Number(movieObj.rating),
+        year: Number(movieObj.year),
     }
 
     movies.push(movie);
