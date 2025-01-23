@@ -9,22 +9,24 @@ const movieService = {
     isFound
 }
 
-async function getMovies(filter = {}) {
-    let result = await Movie.find();
+function getMovies(filter = {}) {
+    let query = Movie.find();
 
-    // if(filter.title){
-    //     result = result.filter(movie => movie.title.toLowerCase().includes(filter.title.toLowerCase()));
-    // }
+    if (filter.title) {
+        // TODO: case insensitive and partial search
+        query = query.find({ title: filter.title });
+    }
 
-    // if(filter.genre) {
-    //     result = result.filter(movie => movie.genre.toLowerCase() === filter.genre.toLowerCase());
-    // }
+    if (filter.genre) {
+        // TODO: case insensitive search
+        query = query.find({ genre: filter.genre });
+    }
 
-    // if(filter.year) {
-    //     result = result.filter(movie => movie.year === Number(filter.year));
-    // }
+    if (filter.year) {
+        query = query.find({ year: Number(filter.year) });
+    }
 
-    return result;
+    return query;
 }
 
 async function getSingleMovie(movieId) {
@@ -44,7 +46,7 @@ function saveMovie(movieObj) {
 }
 
 function isFound(movieObj) {
-    if(!movieObj){
+    if (!movieObj) {
         return false;
     }
 
