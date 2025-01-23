@@ -1,5 +1,6 @@
 import { v4 as generateId } from 'uuid';
-import movies from "../movies.js";
+import Movie from '../models/Movie.js';
+// import movies from "../movies.js";
 
 const movieService = {
     getMovies,
@@ -8,20 +9,20 @@ const movieService = {
     isFound
 }
 
-function getMovies(filter = {}) {
-    let result = movies;
+async function getMovies(filter = {}) {
+    let result = await Movie.find();
 
-    if(filter.title){
-        result = result.filter(movie => movie.title.toLowerCase().includes(filter.title.toLowerCase()));
-    }
+    // if(filter.title){
+    //     result = result.filter(movie => movie.title.toLowerCase().includes(filter.title.toLowerCase()));
+    // }
 
-    if(filter.genre) {
-        result = result.filter(movie => movie.genre.toLowerCase() === filter.genre.toLowerCase());
-    }
+    // if(filter.genre) {
+    //     result = result.filter(movie => movie.genre.toLowerCase() === filter.genre.toLowerCase());
+    // }
 
-    if(filter.year) {
-        result = result.filter(movie => movie.year === Number(filter.year));
-    }
+    // if(filter.year) {
+    //     result = result.filter(movie => movie.year === Number(filter.year));
+    // }
 
     return result;
 }

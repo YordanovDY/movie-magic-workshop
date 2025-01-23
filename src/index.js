@@ -22,8 +22,13 @@ try {
 // Handlebars Config
 app.engine('hbs', handlebars.engine({
     extname: 'hbs',
+
     helpers: {
         showRating: showRatingHelper
+    },
+    
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true
     }
 }));
 
