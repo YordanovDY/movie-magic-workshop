@@ -1,6 +1,4 @@
-import { v4 as generateId } from 'uuid';
 import Movie from '../models/Movie.js';
-// import movies from "../movies.js";
 
 const movieService = {
     getMovies,
@@ -29,8 +27,8 @@ function getMovies(filter = {}) {
     return query;
 }
 
-async function getSingleMovie(movieId) {
-    return await Movie.findById(movieId);
+function getSingleMovie(movieId) {
+    return Movie.findById(movieId);
 }
 
 function saveMovie(movieObj) {
