@@ -1,7 +1,12 @@
 import Cast from "../models/Cast.js";
 
 const castService = {
-    saveCast,
+    getCasts,
+    saveCast
+}
+
+function getCasts() {
+    return Cast.find();
 }
 
 function saveCast(castObj) {
