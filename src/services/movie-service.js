@@ -32,15 +32,13 @@ function getSingleMovie(movieId) {
 }
 
 function saveMovie(movieObj) {
-    const id = generateId();
     const movie = {
-        id,
         ...movieObj,
         rating: Number(movieObj.rating),
         year: Number(movieObj.year),
     }
 
-    movies.push(movie);
+    return Movie.create(movie);
 }
 
 function isFound(movieObj) {
