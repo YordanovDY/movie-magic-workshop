@@ -2,6 +2,7 @@ import Movie from '../models/Movie.js';
 
 const movieService = {
     getMovies,
+    getMovieWithCasts,
     getSingleMovie,
     saveMovie,
     attachCast,
@@ -26,6 +27,10 @@ function getMovies(filter = {}) {
     }
 
     return query;
+}
+
+function getMovieWithCasts(movieId) {
+    return Movie.findById(movieId).populate('casts');
 }
 
 function getSingleMovie(movieId) {
