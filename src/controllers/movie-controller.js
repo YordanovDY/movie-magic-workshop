@@ -8,11 +8,11 @@ movieController.get('/search', async (req, res) => {
 
     const movies = await movieService.getMovies(filter);
 
-    res.render('search', { movies, filter });
+    res.render('movie/search', { movies, filter });
 })
 
 movieController.get('/create', (req, res) => {
-    res.render('create');
+    res.render('movie/create');
 });
 
 movieController.post('/create', async (req, res) => {
@@ -28,7 +28,7 @@ movieController.get('/:movieId/details', async (req, res) => {
     const movie = await movieService.getSingleMovie(movieId);
 
     if (movieService.isFound(movie)) {
-        res.render('details', { movie });
+        res.render('movie/details', { movie });
         return;
     }
 
