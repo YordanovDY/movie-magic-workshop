@@ -27,8 +27,8 @@ async function getMovies(filter = {}) {
     return result;
 }
 
-function getSingleMovie(movieId) {
-    return movies.find(m => m.id === movieId) || {};
+async function getSingleMovie(movieId) {
+    return await Movie.findById(movieId);
 }
 
 function saveMovie(movieObj) {
@@ -44,6 +44,10 @@ function saveMovie(movieObj) {
 }
 
 function isFound(movieObj) {
+    if(!movieObj){
+        return false;
+    }
+
     return Object.keys(movieObj).length > 0 ? true : false;
 }
 
