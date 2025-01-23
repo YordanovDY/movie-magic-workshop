@@ -4,6 +4,7 @@ const movieService = {
     getMovies,
     getSingleMovie,
     saveMovie,
+    attachCast,
     isFound
 }
 
@@ -39,6 +40,10 @@ function saveMovie(movieObj) {
     }
 
     return Movie.create(movie);
+}
+
+function attachCast(movieId, castId) {
+    return Movie.findByIdAndUpdate(movieId, {$push: {casts: castId}});
 }
 
 function isFound(movieObj) {
