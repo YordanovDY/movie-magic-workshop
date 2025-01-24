@@ -5,8 +5,14 @@ const castService = {
     saveCast
 }
 
-function getCasts() {
-    return Cast.find();
+function getCasts(filter = {}) {
+    let query = Cast.find();
+
+    if(filter.exclude){
+        query = query.find({_id: {$nin: filter.exclude}});
+    }
+
+    return query;
 }
 
 function saveCast(castObj) {
