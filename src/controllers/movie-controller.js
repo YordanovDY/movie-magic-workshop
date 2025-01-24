@@ -49,13 +49,21 @@ movieController.get('/:movieId/attach-cast', async (req, res) => {
     res.redirect('/404');
 });
 
-movieController.post('/:movieId/attach-cast', async (req, res) => {
+movieController.post('/:movieId/attach-cast', (req, res) => {
     const movieId = req.params.movieId;
     const castId = req.body.cast;
+    const character = req.body.character;
 
-    await movieService.attachCast(movieId, castId);
+    const queries = [
+        movieService.attachCast(movieId, castId),
+        movieService.attachExtCast(movieId, castId, character)
+    ];
 
-    res.redirect(`/movies/${movieId}/details`);
+    Promise.all(queries)
+        .then(() => {
+            res.redirect(`/movies/${movieId}/details`);
+        })
+
 });
 
 export default movieController;
