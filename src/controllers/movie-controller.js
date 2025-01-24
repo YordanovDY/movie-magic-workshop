@@ -26,7 +26,10 @@ movieController.post('/create', async (req, res) => {
 
 movieController.get('/:movieId/details', async (req, res) => {
     const movieId = req.params.movieId;
-    const movie = await movieService.getMovieWithCasts(movieId);
+
+    // OPTION: Change to getMovieWithCasts if you prefer base casts presenting.
+
+    const movie = await movieService.getMovieWithExtCasts(movieId);
 
     if (movieService.isFound(movie)) {
         res.render('movie/details', { movie });
@@ -49,13 +52,21 @@ movieController.get('/:movieId/attach-cast', async (req, res) => {
     res.redirect('/404');
 });
 
-movieController.post('/:movieId/attach-cast', async (req, res) => {
+movieController.post('/:movieId/attach-cast', (req, res) => {
     const movieId = req.params.movieId;
     const castId = req.body.cast;
+    const character = req.body.character;
 
-    await movieService.attachCast(movieId, castId);
+    const queries = [
+        movieService.attachCast(movieId, castId),
+        movieService.attachExtCast(movieId, castId, character)
+    ];
 
-    res.redirect(`/movies/${movieId}/details`);
+    Promise.all(queries)
+        .then(() => {
+            res.redirect(`/movies/${movieId}/details`);
+        })
+
 });
 
 export default movieController;

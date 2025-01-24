@@ -3,9 +3,11 @@ import Movie from '../models/Movie.js';
 const movieService = {
     getMovies,
     getMovieWithCasts,
+    getMovieWithExtCasts,
     getSingleMovie,
     saveMovie,
     attachCast,
+    attachExtCast,
     isFound
 }
 
@@ -33,6 +35,10 @@ function getMovieWithCasts(movieId) {
     return Movie.findById(movieId).populate('casts');
 }
 
+function getMovieWithExtCasts(movieId) {
+    return Movie.findById(movieId).populate('extCasts.cast');
+}
+
 function getSingleMovie(movieId) {
     return Movie.findById(movieId);
 }
@@ -48,7 +54,18 @@ function saveMovie(movieObj) {
 }
 
 function attachCast(movieId, castId) {
-    return Movie.findByIdAndUpdate(movieId, {$push: {casts: castId}});
+    return Movie.findByIdAndUpdate(movieId, { $push: { casts: castId } });
+}
+
+function attachExtCast(movieId, castId, character) {
+    return Movie.findByIdAndUpdate(movieId, {
+        $push: {
+            extCasts: {
+                cast: castId,
+                character
+            }
+        }
+    });
 }
 
 function isFound(movieObj) {

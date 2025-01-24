@@ -12,6 +12,14 @@ const movieSchema = new Schema({
     casts: [{
         type: Types.ObjectId,
         ref: 'Cast'
+    }],
+    extCasts: [{
+        _id: false,
+        character: String,
+        cast: {
+            type: Types.ObjectId,
+            ref: 'Cast'
+        }
     }]
 });
 
