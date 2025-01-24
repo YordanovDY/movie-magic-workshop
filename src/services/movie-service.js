@@ -3,6 +3,7 @@ import Movie from '../models/Movie.js';
 const movieService = {
     getMovies,
     getMovieWithCasts,
+    getMovieWithExtCasts,
     getSingleMovie,
     saveMovie,
     attachCast,
@@ -32,6 +33,10 @@ function getMovies(filter = {}) {
 
 function getMovieWithCasts(movieId) {
     return Movie.findById(movieId).populate('casts');
+}
+
+function getMovieWithExtCasts(movieId) {
+    return Movie.findById(movieId).populate('extCasts.cast');
 }
 
 function getSingleMovie(movieId) {
