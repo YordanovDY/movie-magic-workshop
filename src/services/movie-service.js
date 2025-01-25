@@ -17,15 +17,19 @@ function getMovies(filter = {}) {
     if (filter.title) {
         query = query.find({
             title: {
-                $regex: filter.title, 
+                $regex: filter.title,
                 $options: 'i'
             }
         });
     }
 
     if (filter.genre) {
-        // TODO: case insensitive search
-        query = query.find({ genre: filter.genre });
+        query = query.find({
+            genre: {
+                $regex: filter.genre,
+                $options: 'i'
+            }
+        });
     }
 
     if (filter.year) {
