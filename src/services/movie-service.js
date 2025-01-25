@@ -15,8 +15,12 @@ function getMovies(filter = {}) {
     let query = Movie.find();
 
     if (filter.title) {
-        // TODO: case insensitive and partial search
-        query = query.find({ title: filter.title });
+        query = query.find({
+            title: {
+                $regex: filter.title, 
+                $options: 'i'
+            }
+        });
     }
 
     if (filter.genre) {
