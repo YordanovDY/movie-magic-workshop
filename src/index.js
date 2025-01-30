@@ -3,7 +3,7 @@ import handlebars from 'express-handlebars';
 import routes from './routes.js';
 import showRatingHelper from './helpers/rating-helper.js';
 import mongoose from 'mongoose';
-import 'dotenv/config'
+import 'dotenv/config';
 
 const app = express();
 const port = 3000;
