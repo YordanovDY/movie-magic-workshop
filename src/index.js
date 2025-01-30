@@ -3,6 +3,7 @@ import handlebars from 'express-handlebars';
 import routes from './routes.js';
 import showRatingHelper from './helpers/rating-helper.js';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 
 const app = express();
@@ -37,6 +38,7 @@ app.set('views', './src/views');
 
 
 // Express Config
+app.use(cookieParser());
 app.use('/static', express.static('./src/public'));
 app.use(express.urlencoded({ extended: false }));
 

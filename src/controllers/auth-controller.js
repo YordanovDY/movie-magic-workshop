@@ -12,7 +12,11 @@ authController.post('/login', async (req, res) => {
 
     try {
         const token = await userService.login(email, password);
-        console.log(token);
+
+        res.cookie('auth', token, {
+            maxAge: 2 * 60 * 60 * 1000, // 2h in milliseconds
+            httpOnly: true
+        });
 
         res.redirect('/');
 
