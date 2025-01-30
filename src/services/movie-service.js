@@ -51,11 +51,12 @@ function getSingleMovie(movieId) {
     return Movie.findById(movieId);
 }
 
-function saveMovie(movieObj) {
+function saveMovie(movieObj, creatorId) {
     const movie = {
         ...movieObj,
         rating: Number(movieObj.rating),
         year: Number(movieObj.year),
+        creator: creatorId
     }
 
     return Movie.create(movie);
