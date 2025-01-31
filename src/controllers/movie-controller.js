@@ -30,9 +30,12 @@ movieController.get('/:movieId/details', async (req, res) => {
 
     // OPTION: Change to getMovieWithCasts if you prefer base casts presenting.
     const movie = await movieService.getMovieWithExtCasts(movieId);
+    const user = req.user;
+
+    const isCreator = movieService.isCreator(movie, user);
 
     if (movieService.isFound(movie)) {
-        res.render('movie/details', { movie });
+        res.render('movie/details', { movie, isCreator});
         return;
     }
 

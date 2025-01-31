@@ -8,7 +8,8 @@ const movieService = {
     saveMovie,
     attachCast,
     attachExtCast,
-    isFound
+    isFound,
+    isCreator
 }
 
 function getMovies(filter = {}) {
@@ -83,6 +84,18 @@ function isFound(movieObj) {
     }
 
     return Object.keys(movieObj).length > 0 ? true : false;
+}
+
+function isCreator(movie, user) {
+    if(!movie || !user){
+        return false;
+    }
+
+    if(!movie.creator){
+        return false;
+    }
+
+    return movie.creator.toString() === user.id;
 }
 
 export default movieService;
