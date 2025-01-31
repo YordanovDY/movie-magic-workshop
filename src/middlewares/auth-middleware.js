@@ -31,3 +31,11 @@ export const isAuthenticated = (req, res, next) => {
 
     next();
 }
+
+export const isNotAuthenticated = (req, res, next) => {
+    if(req.user){
+        return res.redirect('/');
+    }
+
+    next();
+}

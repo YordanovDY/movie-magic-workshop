@@ -4,11 +4,11 @@ import { isAuthenticated, isNotAuthenticated } from "../middlewares/auth-middlew
 
 const authController = Router();
 
-authController.get('/login', (req, res) => {
+authController.get('/login', isNotAuthenticated, (req, res) => {
     res.render('auth/login');
 });
 
-authController.post('/login', async (req, res) => {
+authController.post('/login', isNotAuthenticated, async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -27,17 +27,11 @@ authController.post('/login', async (req, res) => {
 
 });
 
-authController.get('/logout', isAuthenticated, (req, res) => {
-    res.clearCookie('auth');
-
-    res.redirect('/');
-});
-
-authController.get('/register', (req, res) => {
+authController.get('/register', isNotAuthenticated, (req, res) => {
     res.render('auth/register');
 });
 
-authController.post('/register', async (req, res) => {
+authController.post('/register', isNotAuthenticated, async (req, res) => {
     const { email, password, repassword } = req.body;
 
     try {
@@ -48,6 +42,12 @@ authController.post('/register', async (req, res) => {
         console.error(err.message);
         res.redirect('/404');
     }
+});
+
+authController.get('/logout', isAuthenticated, (req, res) => {
+    res.clearCookie('auth');
+
+    res.redirect('/');
 });
 
 export default authController;
