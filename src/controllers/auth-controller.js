@@ -26,6 +26,12 @@ authController.post('/login', async (req, res) => {
 
 });
 
+authController.get('/logout', (req, res) => {
+    res.clearCookie('auth');
+
+    res.redirect('/');
+});
+
 authController.get('/register', (req, res) => {
     res.render('auth/register');
 });
