@@ -6,6 +6,7 @@ const movieService = {
     getMovieWithExtCasts,
     getSingleMovie,
     saveMovie,
+    updateMovie,
     deleteMovie,
     attachCast,
     attachExtCast,
@@ -64,6 +65,14 @@ function saveMovie(movieObj, creatorId) {
     return Movie.create(movie);
 }
 
+function updateMovie(movieId, newMovieData) {
+    return Movie.findByIdAndUpdate(movieId, newMovieData);
+}
+
+function deleteMovie(movieId) {
+    return Movie.findByIdAndDelete(movieId);
+}
+
 function attachCast(movieId, castId) {
     return Movie.findByIdAndUpdate(movieId, { $push: { casts: castId } });
 }
@@ -97,10 +106,6 @@ function isCreator(movie, user) {
     }
 
     return movie.creator.toString() === user.id;
-}
-
-function deleteMovie(movieId) {
-    return Movie.findByIdAndDelete(movieId);
 }
 
 export default movieService;
