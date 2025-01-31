@@ -12,7 +12,10 @@ export const authMiddleware = (req, res, next) => {
 
     try {
         const tokenData = jwt.verify(token, JWT_SECRET);
+
         req.user = tokenData;
+        res.locals.user = tokenData;
+
         next();
 
     } catch (err) {
