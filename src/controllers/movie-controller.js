@@ -1,6 +1,7 @@
 import { Router } from "express";
 import movieService from '../services/movie-service.js';
 import castService from "../services/cast-service.js";
+import viewDataUtil from "../utils/view-data-util.js";
 
 const movieController = Router();
 
@@ -35,15 +36,23 @@ movieController.get('/:movieId/details', async (req, res) => {
     const isCreator = movieService.isCreator(movie, user);
 
     if (movieService.isFound(movie)) {
-        res.render('movie/details', { movie, isCreator});
+        res.render('movie/details', { movie, isCreator });
         return;
     }
 
     res.redirect('/404');
 });
 
-movieController.get('/:movieId/edit', (req, res) => {
-    res.render('movie/edit');
+movieController.get('/:movieId/edit', async (req, res) => {
+    const movieId = req.params.movieId;
+
+    const movie = await movieService.getSingleMovie(movieId);
+
+    const categories = viewDataUtil.getCategoriesViewData(movie.category);
+
+    res.render('movie/edit', { movie, categories });
+});
+
 });
 
 movieController.get('/:movieId/delete', async (req, res) => {
@@ -53,7 +62,7 @@ movieController.get('/:movieId/delete', async (req, res) => {
 
     const isCreator = movieService.isCreator(movie, user);
 
-    if(!isCreator) {
+    if (!isCreator) {
         return res.redirect('/404');
     }
 
