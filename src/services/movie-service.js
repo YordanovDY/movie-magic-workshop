@@ -6,6 +6,7 @@ const movieService = {
     getMovieWithExtCasts,
     getSingleMovie,
     saveMovie,
+    deleteMovie,
     attachCast,
     attachExtCast,
     isFound,
@@ -96,6 +97,10 @@ function isCreator(movie, user) {
     }
 
     return movie.creator.toString() === user.id;
+}
+
+function deleteMovie(movieId) {
+    return Movie.findByIdAndDelete(movieId);
 }
 
 export default movieService;

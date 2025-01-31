@@ -42,6 +42,21 @@ movieController.get('/:movieId/details', async (req, res) => {
     res.redirect('/404');
 });
 
+movieController.get('/:movieId/delete', async (req, res) => {
+    const movieId = req.params.movieId;
+    const movie = await movieService.getSingleMovie(movieId);
+    const user = req.user;
+
+    const isCreator = movieService.isCreator(movie, user);
+
+    if(!isCreator) {
+        return res.redirect('/404');
+    }
+
+    await movieService.deleteMovie(movieId);
+    res.redirect('/');
+});
+
 movieController.get('/:movieId/attach-cast', async (req, res) => {
     const movieId = req.params.movieId;
     const movie = await movieService.getSingleMovie(movieId);
