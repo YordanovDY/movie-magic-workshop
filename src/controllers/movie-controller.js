@@ -2,6 +2,7 @@ import { Router } from "express";
 import movieService from '../services/movie-service.js';
 import castService from "../services/cast-service.js";
 import viewDataUtil from "../utils/view-data-util.js";
+import { isAuthenticated } from "../middlewares/auth-middleware.js";
 
 const movieController = Router();
 
@@ -13,11 +14,11 @@ movieController.get('/search', async (req, res) => {
     res.render('movie/search', { movies, filter });
 })
 
-movieController.get('/create', (req, res) => {
+movieController.get('/create', isAuthenticated, (req, res) => {
     res.render('movie/create');
 });
 
-movieController.post('/create', async (req, res) => {
+movieController.post('/create', isAuthenticated, async (req, res) => {
     const newMovie = req.body;
     const creatorId = req.user?.id;
 
@@ -43,7 +44,7 @@ movieController.get('/:movieId/details', async (req, res) => {
     res.redirect('/404');
 });
 
-movieController.get('/:movieId/edit', async (req, res) => {
+movieController.get('/:movieId/edit', isAuthenticated, async (req, res) => {
     const movieId = req.params.movieId;
 
     const movie = await movieService.getSingleMovie(movieId);
@@ -53,7 +54,7 @@ movieController.get('/:movieId/edit', async (req, res) => {
     res.render('movie/edit', { movie, categories });
 });
 
-movieController.post('/:movieId/edit', async (req, res) => {
+movieController.post('/:movieId/edit', isAuthenticated,  async (req, res) => {
     const movieId = req.params.movieId;
     const movieData = req.body;
     const movie = await movieService.getSingleMovie(movieId);
@@ -69,7 +70,7 @@ movieController.post('/:movieId/edit', async (req, res) => {
     res.redirect(`/movies/${movieId}/details`);
 });
 
-movieController.get('/:movieId/delete', async (req, res) => {
+movieController.get('/:movieId/delete', isAuthenticated, async (req, res) => {
     const movieId = req.params.movieId;
     const movie = await movieService.getSingleMovie(movieId);
     const user = req.user;
@@ -84,7 +85,7 @@ movieController.get('/:movieId/delete', async (req, res) => {
     res.redirect('/');
 });
 
-movieController.get('/:movieId/attach-cast', async (req, res) => {
+movieController.get('/:movieId/attach-cast', isAuthenticated, async (req, res) => {
     const movieId = req.params.movieId;
     const movie = await movieService.getSingleMovie(movieId);
     const casts = await castService.getCasts({ exclude: movie.casts });
@@ -97,7 +98,7 @@ movieController.get('/:movieId/attach-cast', async (req, res) => {
     res.redirect('/404');
 });
 
-movieController.post('/:movieId/attach-cast', (req, res) => {
+movieController.post('/:movieId/attach-cast', isAuthenticated, (req, res) => {
     const movieId = req.params.movieId;
     const castId = req.body.cast;
     const character = req.body.character;

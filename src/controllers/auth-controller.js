@@ -1,5 +1,6 @@
 import { Router } from "express";
 import userService from "../services/auth-service.js";
+import { isAuthenticated, isNotAuthenticated } from "../middlewares/auth-middleware.js";
 
 const authController = Router();
 
@@ -26,7 +27,7 @@ authController.post('/login', async (req, res) => {
 
 });
 
-authController.get('/logout', (req, res) => {
+authController.get('/logout', isAuthenticated, (req, res) => {
     res.clearCookie('auth');
 
     res.redirect('/');
