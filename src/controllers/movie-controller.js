@@ -73,7 +73,7 @@ movieController.post('/:movieId/edit', isAuthenticated,  async (req, res) => {
     const isCreator = movieService.isCreator(movie, user);
 
     if (!isCreator) {
-        return res.redirect('/');
+        return res.redirect('/404');
     }
 
     await movieService.updateMovie(movieId, movieData);
