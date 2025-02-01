@@ -1,49 +1,26 @@
 import express from 'express';
-import handlebars from 'express-handlebars';
 import routes from './routes.js';
-import showRatingHelper from './helpers/rating-helper.js';
-import mongoose from 'mongoose';
-import cookieParser from 'cookie-parser';
 import { authMiddleware } from './middlewares/auth-middleware.js';
-import 'dotenv/config';
+import handlebarsInit from './config/handlebars-init.js';
+import databaseInit from './config/database-init.js';
+import expressInit from './config/express-init.js';
 
 const app = express();
 const port = 3000;
-const { DATABASE_URI } = process.env;
 
 // DB Config
-try {
-    await mongoose.connect(DATABASE_URI);
-    console.log('DB Connected Successfully.');
-
-} catch (err) {
-    console.error('Cannot connect to DB:\n' + err.message);
-
-}
+await databaseInit();
 
 // Handlebars Config
-app.engine('hbs', handlebars.engine({
-    extname: 'hbs',
-
-    helpers: {
-        showRating: showRatingHelper
-    },
-    
-    runtimeOptions: {
-        allowProtoPropertiesByDefault: true
-    }
-}));
-
-app.set('view engine', 'hbs');
-app.set('views', './src/views');
-
+handlebarsInit(app);
 
 // Express Config
-app.use('/static', express.static('./src/public'));
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+expressInit(app);
+
+// Custom Middlewares
 app.use(authMiddleware);
 
+// Routes Config
 app.use(routes);
 
 app.listen(port, () => console.log(`Server is listening on http://localhost:${port}...`));
