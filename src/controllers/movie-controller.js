@@ -44,10 +44,20 @@ movieController.get('/:movieId/details', async (req, res) => {
     res.redirect('/404');
 });
 
+// TODO: movie edit page must be accessable only for the creator
+
 movieController.get('/:movieId/edit', isAuthenticated, async (req, res) => {
     const movieId = req.params.movieId;
 
     const movie = await movieService.getSingleMovie(movieId);
+
+    const user = req.user;
+
+    const isCreator = movieService.isCreator(movie, user);
+
+    if(!isCreator){
+        return res.redirect('/404');
+    }
 
     const categories = viewDataUtil.getCategoriesViewData(movie.category);
 
