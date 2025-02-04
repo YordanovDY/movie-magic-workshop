@@ -3,6 +3,7 @@ import movieService from '../services/movie-service.js';
 import castService from "../services/cast-service.js";
 import viewDataUtil from "../utils/view-data-util.js";
 import { isAuthenticated } from "../middlewares/auth-middleware.js";
+import { getErrorMessage } from "../utils/error-utils.js";
 
 const movieController = Router();
 
@@ -20,9 +21,16 @@ movieController.get('/create', isAuthenticated, (req, res) => {
 
 movieController.post('/create', isAuthenticated, async (req, res) => {
     const newMovie = req.body;
-    const creatorId = req.user?.id;
+    const creatorId = req.user.id;
 
-    await movieService.saveMovie(newMovie, creatorId);
+    try {
+        await movieService.saveMovie(newMovie, creatorId);
+
+    } catch (err) {
+        const errorMsg = getErrorMessage(err);
+        const categories = viewDataUtil.getCategoriesViewData(newMovie.category);
+        return res.render('movie/create', { error: errorMsg, movie: newMovie, categories });
+    }
 
     res.redirect('/');
 });
@@ -55,7 +63,7 @@ movieController.get('/:movieId/edit', isAuthenticated, async (req, res) => {
 
     const isCreator = movieService.isCreator(movie, user);
 
-    if(!isCreator){
+    if (!isCreator) {
         return res.redirect('/404');
     }
 
@@ -64,10 +72,17 @@ movieController.get('/:movieId/edit', isAuthenticated, async (req, res) => {
     res.render('movie/edit', { movie, categories });
 });
 
-movieController.post('/:movieId/edit', isAuthenticated,  async (req, res) => {
+movieController.post('/:movieId/edit', isAuthenticated, async (req, res) => {
     const movieId = req.params.movieId;
     const movieData = req.body;
-    const movie = await movieService.getSingleMovie(movieId);
+
+    let movie = null;
+    try {
+        movie = await movieService.getSingleMovie(movieId);
+
+    } catch (err) {
+        return res.redirect('/404');
+    }
     const user = req.user;
 
     const isCreator = movieService.isCreator(movie, user);
@@ -76,7 +91,15 @@ movieController.post('/:movieId/edit', isAuthenticated,  async (req, res) => {
         return res.redirect('/404');
     }
 
-    await movieService.updateMovie(movieId, movieData);
+    try {
+        await movieService.updateMovie(movieId, movieData);
+
+    } catch (err) {
+        const errorMsg = getErrorMessage(err);
+        const categories = viewDataUtil.getCategoriesViewData(movie.category);
+        return res.render('movie/edit', { movie, error: errorMsg, categories });
+    }
+
     res.redirect(`/movies/${movieId}/details`);
 });
 
@@ -91,7 +114,14 @@ movieController.get('/:movieId/delete', isAuthenticated, async (req, res) => {
         return res.redirect('/404');
     }
 
-    await movieService.deleteMovie(movieId);
+
+    try {
+        await movieService.deleteMovie(movieId);
+
+    } catch (err) {
+        return res.redirect('/404');
+    }
+
     res.redirect('/');
 });
 

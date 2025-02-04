@@ -66,7 +66,7 @@ function saveMovie(movieObj, creatorId) {
 }
 
 function updateMovie(movieId, newMovieData) {
-    return Movie.findByIdAndUpdate(movieId, newMovieData);
+    return Movie.findByIdAndUpdate(movieId, newMovieData, {runValidators: true});
 }
 
 function deleteMovie(movieId) {
