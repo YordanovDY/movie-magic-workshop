@@ -10,7 +10,13 @@ const userService = {
     login,
 }
 
-function register(email, password, repassword) {
+async function register(email, password, repassword) {
+    const foundUser = await User.findOne({email});
+
+    if(foundUser){
+        throw new Error(`User with email ${email} already exists!`)
+    }
+
     if (password !== repassword) {
         throw new Error('Passwords do not match!');
     }
