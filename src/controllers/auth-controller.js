@@ -1,6 +1,7 @@
 import { Router } from "express";
 import userService from "../services/auth-service.js";
 import { isAuthenticated, isNotAuthenticated } from "../middlewares/auth-middleware.js";
+import { getErrorMessage } from "../utils/error-utils.js";
 
 const authController = Router();
 
@@ -39,7 +40,7 @@ authController.post('/register', isNotAuthenticated, async (req, res) => {
         res.redirect('/');
 
     } catch (err) {
-        console.error(err.message);
+        console.error(getErrorMessage(err));
         res.redirect('/404');
     }
 });
