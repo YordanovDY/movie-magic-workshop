@@ -40,8 +40,8 @@ authController.post('/register', isNotAuthenticated, async (req, res) => {
         res.redirect('/');
 
     } catch (err) {
-        console.error(getErrorMessage(err));
-        res.redirect('/404');
+        const errorMsg = getErrorMessage(err);
+        res.render('auth/register', { error: errorMsg });
     }
 });
 
