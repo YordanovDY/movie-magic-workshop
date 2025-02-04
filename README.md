@@ -1,2 +1,2 @@
 # movie-magic-workshop
-JS Back-End Course Workshop
+Express.js MVC Application Workshop as part of the JS Back-End Course
