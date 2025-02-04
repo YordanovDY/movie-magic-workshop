@@ -10,7 +10,15 @@ const movieController = Router();
 movieController.get('/search', async (req, res) => {
     const filter = req.query;
 
-    const movies = await movieService.getMovies(filter);
+    let movies = null;
+    try {
+        movies = await movieService.getMovies(filter);
+
+    } catch (err) {
+        const errorMsg = getErrorMessage(err);
+        res.setError(errorMsg);
+        return res.redirect('/404');
+    }
 
     res.render('movie/search', { movies, filter });
 })
@@ -38,32 +46,40 @@ movieController.post('/create', isAuthenticated, async (req, res) => {
 movieController.get('/:movieId/details', async (req, res) => {
     const movieId = req.params.movieId;
 
-    // OPTION: Change to getMovieWithCasts if you prefer base casts presenting.
-    const movie = await movieService.getMovieWithExtCasts(movieId);
-    const user = req.user;
-
-    const isCreator = movieService.isCreator(movie, user);
-
-    if (movieService.isFound(movie)) {
+    let movie = null;
+    try {
+        // OPTION: Change to getMovieWithCasts if you prefer base casts presenting.
+        movie = await movieService.getMovieWithExtCasts(movieId);
+        const user = req.user;
+        const isCreator = movieService.isCreator(movie, user);
         res.render('movie/details', { movie, isCreator });
-        return;
+
+    } catch (err) {
+        res.setError('There is no such movie!');
+        return res.redirect('/404');
     }
 
-    res.redirect('/404');
 });
-
-// TODO: movie edit page must be accessable only for the creator
 
 movieController.get('/:movieId/edit', isAuthenticated, async (req, res) => {
     const movieId = req.params.movieId;
 
-    const movie = await movieService.getSingleMovie(movieId);
+    let movie = null;
+    try {
+        movie = await movieService.getSingleMovie(movieId);
+
+    } catch (err) {
+        res.setError('There is no such movie!');
+        return res.redirect('/404');
+    }
+
 
     const user = req.user;
 
     const isCreator = movieService.isCreator(movie, user);
 
     if (!isCreator) {
+        res.setError('Only the creator of the movie can make changes!')
         return res.redirect('/404');
     }
 
@@ -81,8 +97,10 @@ movieController.post('/:movieId/edit', isAuthenticated, async (req, res) => {
         movie = await movieService.getSingleMovie(movieId);
 
     } catch (err) {
+        res.setError('There is no such movie!');
         return res.redirect('/404');
     }
+
     const user = req.user;
 
     const isCreator = movieService.isCreator(movie, user);
@@ -105,20 +123,31 @@ movieController.post('/:movieId/edit', isAuthenticated, async (req, res) => {
 
 movieController.get('/:movieId/delete', isAuthenticated, async (req, res) => {
     const movieId = req.params.movieId;
-    const movie = await movieService.getSingleMovie(movieId);
+
+    let movie = null;
+    try {
+        movie = await movieService.getSingleMovie(movieId);
+
+    } catch (err) {
+        res.setError('There is no such movie!');
+        return res.redirect('/404');
+    }
+
     const user = req.user;
 
     const isCreator = movieService.isCreator(movie, user);
 
     if (!isCreator) {
+        res.setError('Only the creator can delete the movie!');
         return res.redirect('/404');
     }
-
 
     try {
         await movieService.deleteMovie(movieId);
 
     } catch (err) {
+        const errorMsg = getErrorMessage(err);
+        res.setError(errorMsg);
         return res.redirect('/404');
     }
 
@@ -127,15 +156,26 @@ movieController.get('/:movieId/delete', isAuthenticated, async (req, res) => {
 
 movieController.get('/:movieId/attach-cast', isAuthenticated, async (req, res) => {
     const movieId = req.params.movieId;
-    const movie = await movieService.getSingleMovie(movieId);
-    const casts = await castService.getCasts({ exclude: movie.casts });
 
-    if (movieService.isFound(movie)) {
+    try {
+        const movie = await movieService.getSingleMovie(movieId);
+        const casts = await castService.getCasts({ exclude: movie.casts });
+
+        const user = req.user;
+        const isCreator = movieService.isCreator(movie, user);
+
+        if (!isCreator) {
+            res.setError('Only the creator of the movie can attach-casts!');
+            return res.redirect('/404');
+        }
+
         res.render('movie/attach-cast', { movie, casts });
-        return;
-    }
 
-    res.redirect('/404');
+    } catch (err) {
+        const errorMsg = getErrorMessage(err);
+        res.setError(errorMsg);
+        res.redirect('/404');
+    }
 });
 
 movieController.post('/:movieId/attach-cast', isAuthenticated, (req, res) => {
@@ -152,7 +192,11 @@ movieController.post('/:movieId/attach-cast', isAuthenticated, (req, res) => {
         .then(() => {
             res.redirect(`/movies/${movieId}/details`);
         })
-
+        .catch((err) => {
+            const errorMsg = getErrorMessage(err);
+            res.setError(errorMsg);
+            res.redirect('/404');
+        });
 });
 
 export default movieController;

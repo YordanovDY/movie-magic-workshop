@@ -4,6 +4,7 @@ import { authMiddleware } from './middlewares/auth-middleware.js';
 import handlebarsInit from './config/handlebars-init.js';
 import databaseInit from './config/database-init.js';
 import expressInit from './config/express-init.js';
+import { tempDataMiddleware } from './middlewares/temp-data-middleware.js';
 
 const app = express();
 const port = 3000;
@@ -19,6 +20,7 @@ expressInit(app);
 
 // Custom Middlewares
 app.use(authMiddleware);
+app.use(tempDataMiddleware);
 
 // Routes Config
 app.use(routes);
