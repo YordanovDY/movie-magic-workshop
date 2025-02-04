@@ -5,10 +5,12 @@ const movieSchema = new Schema({
         type: String,
         required: [true, 'Title is required!'],
         minLength: [5, 'Title must be at least 5 characters long!'],
-        match: [/^[a-zA-z 0-9]+$/, 'Title must contain alphanumeric and whitespaces only!']
+        match: [/^[a-zA-z 0-9]+$/, 'Title must contain alphanumeric and whitespaces only!'],
+        trim: true
     },
     category: {
         type: String,
+        required: [true, 'Category is required!'],
         enum: [
             'tv-show',
             'animation',
@@ -21,19 +23,21 @@ const movieSchema = new Schema({
         type: String,
         required: [true, 'Genre is required!'],
         minLength: [5, 'Genre must be at least 5 characters long!'],
-        match: [/^[a-zA-z 0-9]+$/, 'Genre must contain alphanumeric and whitespaces only!']
+        match: [/^[a-zA-z 0-9]+$/, 'Genre must contain alphanumeric and whitespaces only!'],
+        trim: true
     },
     director: {
         type: String,
         required: [true, 'Director is required!'],
         minLength: [5, 'Director must be at least 5 characters long!'],
-        match: [/^[a-zA-z 0-9]+$/, 'Director must contain alphanumeric and whitespaces only!']
+        match: [/^[a-zA-z 0-9]+$/, 'Director must contain alphanumeric and whitespaces only!'],
+        trim: true
     },
     year: {
         type: Number,
         required: [true, 'Year is required!'],
         min: [1900, 'Year must be in range 1900 to 2025'],
-        max: [2025, 'Year must be in range 1900 to 2025']
+        max: [2025, 'Year must be in range 1900 to 2025'],
     },
     imageUrl: {
         type: String,
@@ -43,7 +47,8 @@ const movieSchema = new Schema({
                 return condition;
             },
             message: (props) => 'Invalid image URL'
-        }
+        },
+        trim: true
     },
     rating: {
         type: Number,
@@ -53,7 +58,8 @@ const movieSchema = new Schema({
     description: {
         type: String,
         minLength: [20, 'Description must be at least 20 characters long!'],
-        match: [/^[a-zA-z 0-9]+$/, 'Description must contain alphanumeric and whitespaces only!']
+        match: [/^[a-zA-z 0-9]+$/, 'Description must contain alphanumeric and whitespaces only!'],
+        trim: true
     },
     casts: [{
         type: Types.ObjectId,

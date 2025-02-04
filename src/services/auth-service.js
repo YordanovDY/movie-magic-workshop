@@ -25,6 +25,9 @@ async function register(email, password, repassword) {
 }
 
 async function login(email, password) {
+    email = email.toLowerCase().trim();
+    password = password.trim();
+
     const user = await User.findOne({ email });
     const errorMsg = 'Invalid email or password!';
 
