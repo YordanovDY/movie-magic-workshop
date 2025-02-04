@@ -19,8 +19,8 @@ handlebarsInit(app);
 expressInit(app);
 
 // Custom Middlewares
-app.use(authMiddleware);
 app.use(tempDataMiddleware);
+app.use(authMiddleware);
 
 // Routes Config
 app.use(routes);

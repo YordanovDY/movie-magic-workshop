@@ -26,6 +26,7 @@ export const authMiddleware = (req, res, next) => {
 
 export const isAuthenticated = (req, res, next) => {
     if(!req.user){
+        res.setError('You must be authenticated!');
         return res.redirect('/auth/login');
     }
 
@@ -34,6 +35,7 @@ export const isAuthenticated = (req, res, next) => {
 
 export const isNotAuthenticated = (req, res, next) => {
     if(req.user){
+        res.setError('You are already authenticated!');
         return res.redirect('/');
     }
 
